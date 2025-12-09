@@ -22,7 +22,6 @@ public class MatchSnapshotDto
     [JsonPropertyName("timestamp")]
     public long Timestamp { get; set; }
 
-    [JsonIgnore] // Deprecated in favor of 'State'
     [JsonPropertyName("status")]
     public string Status { get; set; }
 
@@ -37,6 +36,9 @@ public class MatchSnapshotDto
 
     [JsonPropertyName("players")]
     public List<PlayerDto> Players { get; set; }
+
+    [JsonPropertyName("isFinal")]
+    public bool IsFinal { get; set; }
 }
 
 public class PlayerDto
