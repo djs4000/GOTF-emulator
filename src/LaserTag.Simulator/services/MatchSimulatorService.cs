@@ -11,7 +11,7 @@ public class MatchSimulatorService : IDisposable
     private long _remainingTimeMs;
     private string _matchId;
     private List<PlayerDto> _players;
-    private string _targetUrl;
+    private Func<string> _getTargetUrl;
     private int _updateFrequency;
     private CancellationTokenSource _cts;
 
@@ -21,13 +21,13 @@ public class MatchSimulatorService : IDisposable
     {
         _matchId = $"sim-match-{Guid.NewGuid().ToString().Substring(0, 8)}";
         _players = new List<PlayerDto>();
-        _targetUrl = string.Empty;
+        _getTargetUrl = () => string.Empty;
         _cts = new CancellationTokenSource();
     }
 
-    public void Start(string targetUrl, int updateFrequency, int matchDuration, List<PlayerDto> players)
+    public void Start(Func<string> getTargetUrl, int updateFrequency, int matchDuration, List<PlayerDto> players)
     {
-        _targetUrl = targetUrl;
+        _getTargetUrl = getTargetUrl;
         _updateFrequency = updateFrequency;
         _remainingTimeMs = matchDuration * 1000;
         _players = players;
@@ -66,9 +66,10 @@ public class MatchSimulatorService : IDisposable
 
         try
         {
+            var targetUrl = _getTargetUrl();
             var json = JsonSerializer.Serialize(snapshot, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            await _httpClient.PostAsync($"{_targetUrl}/match", content, _cts.Token);
+            await _httpClient.PostAsync($"{targetUrl}/match", content, _cts.Token);
         }
         catch (Exception ex)
         {

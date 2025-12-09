@@ -9,7 +9,7 @@ public class PropSimulatorService : IDisposable
     private readonly HttpClient _httpClient = new();
     private System.Threading.Timer? _heartbeatTimer;
     private PropSnapshotDto _currentPropState;
-    private string _targetUrl;
+    private Func<string> _getTargetUrl;
     private int _updateFrequency;
     private CancellationTokenSource _cts;
     private DateTime _startTime;
@@ -25,13 +25,13 @@ public class PropSimulatorService : IDisposable
             TimerMs = 0,
             UptimeMs = 0
         };
-        _targetUrl = string.Empty;
+        _getTargetUrl = () => string.Empty;
         _cts = new CancellationTokenSource();
     }
 
-    public void Start(string targetUrl, int updateFrequency)
+    public void Start(Func<string> getTargetUrl, int updateFrequency)
     {
-        _targetUrl = targetUrl;
+        _getTargetUrl = getTargetUrl;
         _updateFrequency = updateFrequency;
         _cts = new CancellationTokenSource();
         _startTime = DateTime.UtcNow;
@@ -79,9 +79,10 @@ public class PropSimulatorService : IDisposable
 
         try
         {
+            var targetUrl = _getTargetUrl();
             var json = JsonSerializer.Serialize(_currentPropState, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            await _httpClient.PostAsync($"{_targetUrl}/prop", content, _cts.Token);
+            await _httpClient.PostAsync($"{targetUrl}/prop", content, _cts.Token);
         }
         catch (Exception ex)
         {

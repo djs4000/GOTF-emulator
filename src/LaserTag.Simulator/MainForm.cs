@@ -28,7 +28,7 @@ namespace LaserTag.Simulator
             UpdateConfig();
             playerDataGridView.DataSource = _playerBindingSource;
 
-            _propSimulatorService.Start(_targetUrl, (int)this.updateFreqNumericUpDown.Value); // Prop starts with app
+            // _propSimulatorService.Start(() => _targetUrl, (int)this.updateFreqNumericUpDown.Value); // Prop starts with app - REMOVED
         }
 
         private void InitializeEventHandlers()
@@ -51,6 +51,22 @@ namespace LaserTag.Simulator
 
             this.propArmSuccessButton.Click += PropArmSuccessButton_Click;
             this.propArmFailButton.Click += PropArmFailButton_Click;
+            this.startPropButton.Click += StartPropButton_Click;
+            this.stopPropButton.Click += StopPropButton_Click;
+        }
+
+        private void StartPropButton_Click(object? sender, EventArgs e)
+        {
+            Log("Starting prop simulation...");
+            _propSimulatorService.Start(() => _targetUrl, (int)this.updateFreqNumericUpDown.Value);
+            Log("Prop simulation started.");
+        }
+
+        private void StopPropButton_Click(object? sender, EventArgs e)
+        {
+            Log("Stopping prop simulation...");
+            _propSimulatorService.Stop();
+            Log("Prop simulation stopped.");
         }
 
         private void InitializePlayerContextMenu()
@@ -161,7 +177,7 @@ namespace LaserTag.Simulator
                 Log("Error: Roster is not generated.");
                 return;
             }
-            _matchSimulatorService.Start(_targetUrl, _updateFrequency, _matchDuration, players);
+            _matchSimulatorService.Start(() => _targetUrl, _updateFrequency, _matchDuration, players);
             Log("Match started.");
         }
 

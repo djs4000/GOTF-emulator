@@ -1,0 +1,9 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Laser Tag Simulator External Contracts (No Change)",
+    "version": "1.0.0",
+    "description": "This feature does not alter the existing data contracts sent by the simulator."
+  },
+  "paths": {}
+}

@@ -69,7 +69,7 @@ namespace LaserTag.Simulator
             this.configGroupBox.Controls.Add(configLayout);
 
             this.targetUrlLabel = new System.Windows.Forms.Label() { Text = "Target URL:", AutoSize = true };
-            this.targetUrlTextBox = new System.Windows.Forms.TextBox() { Text = "http://127.0.0.1:5055", Width = 300 };
+            this.targetUrlTextBox = new System.Windows.Forms.TextBox() { Text = "http://192.168.1.234:9055", Width = 300 };
             this.updateFreqLabel = new System.Windows.Forms.Label() { Text = "Update Frequency (ms):", AutoSize = true };
             this.updateFreqNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.updateFreqNumericUpDown.Minimum = 0;
@@ -139,7 +139,9 @@ namespace LaserTag.Simulator
             
             this.propTimerLabel = new System.Windows.Forms.Label() { Text = "Prop Timer: 00:00", AutoSize = true };
 
-            propLayout.Controls.AddRange(new System.Windows.Forms.Control[] { this.propStateGroupBox, this.propArmingGroupBox, this.propTimerLabel });
+            this.startPropButton = new System.Windows.Forms.Button() { Text = "Start Prop", AutoSize = true };
+            this.stopPropButton = new System.Windows.Forms.Button() { Text = "Stop Prop", AutoSize = true };
+            propLayout.Controls.AddRange(new System.Windows.Forms.Control[] { this.startPropButton, this.stopPropButton, this.propStateGroupBox, this.propArmingGroupBox, this.propTimerLabel });
 
             // Console TextBox
             this.consoleTextBox = new System.Windows.Forms.TextBox() { 
@@ -194,6 +196,8 @@ namespace LaserTag.Simulator
         private System.Windows.Forms.Button propArmSuccessButton;
         private System.Windows.Forms.Button propArmFailButton;
         private System.Windows.Forms.Label propTimerLabel;
+        private System.Windows.Forms.Button startPropButton;
+        private System.Windows.Forms.Button stopPropButton;
 
         #endregion
     }
