@@ -9,6 +9,7 @@ namespace LaserTag.Simulator
         private string _targetUrl;
         private int _updateFrequency;
         private int _matchDuration;
+        private int _countdownDuration; // New field
         private readonly MatchSimulatorService _matchSimulatorService;
         private readonly PropSimulatorService _propSimulatorService;
         private BindingSource _playerBindingSource = new BindingSource();
@@ -18,7 +19,8 @@ namespace LaserTag.Simulator
         {
             InitializeComponent();
             _matchSimulatorService = new MatchSimulatorService();
-            _matchSimulatorService.OnError += (message) => Log(message);
+            _matchSimulatorService.OnMatchStateChanged += (state, countdownTime, matchTime) => UpdateMatchStateDisplay(state, countdownTime, matchTime);
+            _matchSimulatorService.OnCountdownUpdate += (time) => UpdateMatchCountdownDisplay(time);
             _propSimulatorService = new PropSimulatorService();
             _propSimulatorService.OnError += (message) => Log(message);
             _propSimulatorService.OnPropTimerUpdate += (time) => UpdatePropTimerDisplay(time);
@@ -29,7 +31,66 @@ namespace LaserTag.Simulator
             LoadDefaultRoster(); // Automatically generate roster on startup
             playerDataGridView.DataSource = _playerBindingSource;
 
+            matchStateLabel.Text = $"State: {MatchState.WaitingOnStart}";
+            matchCountdownLabel.Text = "Countdown: --:--";
+            matchTimerLabel.Text = "Match Time: --:--";
             // _propSimulatorService.Start(() => _targetUrl, (int)this.updateFreqNumericUpDown.Value); // Prop starts with app - REMOVED
+        }
+
+        private void UpdateMatchStateDisplay(MatchState state, long remainingCountdownTimeMs, long remainingMatchTimeMs)
+        {
+            if (matchStateLabel.InvokeRequired)
+            {
+                matchStateLabel.Invoke(new Action<MatchState, long, long>(UpdateMatchStateDisplay), state, remainingCountdownTimeMs, remainingMatchTimeMs);
+                return;
+            }
+
+            matchStateLabel.Text = $"State: {state}";
+            
+            // Enable/Disable controls based on state
+            startMatchButton.Enabled = (state == MatchState.WaitingOnStart || state == MatchState.Paused);
+            pauseMatchButton.Enabled = (state == MatchState.Running);
+            stopResetMatchButton.Enabled = (state == MatchState.Running || state == MatchState.Paused || state == MatchState.Countdown);
+            resetMatchButton.Enabled = true; // Always enable reset
+
+            // Update countdown and match timers based on state
+            if (state == MatchState.Countdown)
+            {
+                UpdateMatchCountdownDisplay(remainingCountdownTimeMs);
+                matchTimerLabel.Text = "Match Time: --:--";
+            }
+            else if (state == MatchState.Running || state == MatchState.Paused)
+            {
+                UpdateMatchCountdownDisplay(0); // Clear countdown display
+                UpdateMatchTimerDisplay(remainingMatchTimeMs);
+            }
+            else // WaitingOnStart, Completed
+            {
+                UpdateMatchCountdownDisplay(0);
+                UpdateMatchTimerDisplay(remainingMatchTimeMs); // Show 00:00 or current remaining
+            }
+        }
+
+        private void UpdateMatchCountdownDisplay(long remainingTimeMs)
+        {
+            if (matchCountdownLabel.InvokeRequired)
+            {
+                matchCountdownLabel.Invoke(new Action<long>(UpdateMatchCountdownDisplay), remainingTimeMs);
+                return;
+            }
+            TimeSpan t = TimeSpan.FromMilliseconds(remainingTimeMs);
+            matchCountdownLabel.Text = $"Countdown: {t.Minutes:D2}:{t.Seconds:D2}";
+        }
+
+        private void UpdateMatchTimerDisplay(long remainingTimeMs)
+        {
+            if (matchTimerLabel.InvokeRequired)
+            {
+                matchTimerLabel.Invoke(new Action<long>(UpdateMatchTimerDisplay), remainingTimeMs);
+                return;
+            }
+            TimeSpan t = TimeSpan.FromMilliseconds(remainingTimeMs);
+            matchTimerLabel.Text = $"Match Time: {t.Minutes:D2}:{t.Seconds:D2}";
         }
 
         private void InitializeEventHandlers()
@@ -38,10 +99,12 @@ namespace LaserTag.Simulator
             this.startMatchButton.Click += StartMatchButton_Click;
             this.pauseMatchButton.Click += PauseMatchButton_Click;
             this.stopResetMatchButton.Click += StopResetMatchButton_Click;
+            this.resetMatchButton.Click += ResetMatchButton_Click;
 
             this.targetUrlTextBox.TextChanged += (s, e) => UpdateConfig();
             this.updateFreqNumericUpDown.ValueChanged += (s, e) => UpdateConfig();
             this.matchDurationNumericUpDown.ValueChanged += (s, e) => UpdateConfig();
+            this.countdownDurationNumericUpDown.ValueChanged += (s, e) => UpdateConfig();
 
             this.propStateIdleRadio.CheckedChanged += PropState_CheckedChanged;
             this.propStateActiveRadio.CheckedChanged += PropState_CheckedChanged;
@@ -68,6 +131,16 @@ namespace LaserTag.Simulator
             Log("Stopping prop simulation...");
             _propSimulatorService.Stop();
             Log("Prop simulation stopped.");
+        }
+
+        private void ResetMatchButton_Click(object? sender, EventArgs e)
+        {
+            Log("Resetting match...");
+            _matchSimulatorService.ResetMatch();
+            // Refresh player display with reset player data from service
+            playerDataGridView.DataSource = null; // Clear existing data
+            playerDataGridView.DataSource = _playerBindingSource; // Rebind to trigger refresh
+            Log("Match reset to WaitingOnStart.");
         }
 
         private void InitializePlayerContextMenu()
@@ -151,6 +224,7 @@ namespace LaserTag.Simulator
             _targetUrl = this.targetUrlTextBox.Text;
             _updateFrequency = (int)this.updateFreqNumericUpDown.Value;
             _matchDuration = (int)this.matchDurationNumericUpDown.Value;
+            _countdownDuration = (int)this.countdownDurationNumericUpDown.Value; // Read countdown duration
         }
 
         private void LoadDefaultRoster()
@@ -177,15 +251,15 @@ namespace LaserTag.Simulator
 
         private void StartMatchButton_Click(object? sender, EventArgs e)
         {
-            Log("Starting match...");
+            Log("Starting match countdown...");
             var players = _playerBindingSource.DataSource as List<PlayerDto>;
             if (players == null)
             {
                 Log("Error: Roster is not generated.");
                 return;
             }
-            _matchSimulatorService.Start(() => _targetUrl, _updateFrequency, _matchDuration, players);
-            Log("Match started.");
+            _matchSimulatorService.StartMatchCountdown(() => _targetUrl, _updateFrequency, _matchDuration, _countdownDuration, players);
+            // Log("Match started."); // Logic moved to service and OnMatchStateChanged
         }
 
         private void PauseMatchButton_Click(object? sender, EventArgs e)
@@ -229,6 +303,11 @@ namespace LaserTag.Simulator
             Log("Prop arming failed.");
         }
         
+        // Removed old UpdateMatchTimerDisplay, it's now integrated into UpdateMatchStateDisplay
+
+        // Original StartMatchButton_Click and associated logic has been heavily refactored above.
+
+        // Prop Timer Display:
         private void UpdatePropTimerDisplay(long remainingTimeMs)
         {
             if (propTimerLabel.InvokeRequired)
@@ -239,6 +318,7 @@ namespace LaserTag.Simulator
             TimeSpan t = TimeSpan.FromMilliseconds(remainingTimeMs);
             propTimerLabel.Text = $"Prop Timer: {t.Minutes:D2}:{t.Seconds:D2}";
         }
+
 
         private void Log(string message)
         {

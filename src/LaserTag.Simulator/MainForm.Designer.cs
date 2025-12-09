@@ -90,6 +90,11 @@ namespace LaserTag.Simulator
             this.matchDurationNumericUpDown.Minimum = 0;
             this.matchDurationNumericUpDown.Maximum = 3600;
             this.matchDurationNumericUpDown.Value = 219;
+            this.countdownDurationLabel = new System.Windows.Forms.Label() { Text = "Countdown Duration (s):", AutoSize = true };
+            this.countdownDurationNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.countdownDurationNumericUpDown.Minimum = 0;
+            this.countdownDurationNumericUpDown.Maximum = 600; // Max 10 minutes
+            this.countdownDurationNumericUpDown.Value = 10; // Default 10 seconds
             this.team1NameLabel = new System.Windows.Forms.Label() { Text = "Team 1 Name:", AutoSize = true };
             this.team1NameTextBox = new System.Windows.Forms.TextBox() { Text = "Team 1" };
             this.team2NameLabel = new System.Windows.Forms.Label() { Text = "Team 2 Name:", AutoSize = true };
@@ -103,7 +108,8 @@ namespace LaserTag.Simulator
 
             configLayout.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.targetUrlLabel, this.targetUrlTextBox, this.updateFreqLabel, this.updateFreqNumericUpDown,
-                this.matchDurationLabel, this.matchDurationNumericUpDown, this.team1NameLabel, this.team1NameTextBox,
+                this.matchDurationLabel, this.matchDurationNumericUpDown, this.countdownDurationLabel, this.countdownDurationNumericUpDown,
+                this.team1NameLabel, this.team1NameTextBox,
                 this.team2NameLabel, this.team2NameTextBox, this.playersPerTeamLabel, this.playersPerTeamNumericUpDown,
                 this.generateRosterButton
             });
@@ -115,10 +121,12 @@ namespace LaserTag.Simulator
             this.startMatchButton = new System.Windows.Forms.Button() { Text = "Start Match", AutoSize = true };
             this.pauseMatchButton = new System.Windows.Forms.Button() { Text = "Pause Match", AutoSize = true };
             this.stopResetMatchButton = new System.Windows.Forms.Button() { Text = "Stop/Reset Match", AutoSize = true };
+            this.matchStateLabel = new System.Windows.Forms.Label() { Text = "State: Waiting on Start", AutoSize = true };
+            this.matchCountdownLabel = new System.Windows.Forms.Label() { Text = "Countdown: --:--", AutoSize = true };
             this.matchTimerLabel = new System.Windows.Forms.Label() { Text = "Match Time: 00:00", AutoSize = true };
             
             matchLayout.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.matchTimerLabel
+                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.matchStateLabel, this.matchCountdownLabel, this.matchTimerLabel
             });
 
             // -- Prop Controls --
@@ -180,6 +188,8 @@ namespace LaserTag.Simulator
         private System.Windows.Forms.NumericUpDown updateFreqNumericUpDown;
         private System.Windows.Forms.Label matchDurationLabel;
         private System.Windows.Forms.NumericUpDown matchDurationNumericUpDown;
+        private System.Windows.Forms.Label countdownDurationLabel;
+        private System.Windows.Forms.NumericUpDown countdownDurationNumericUpDown;
         private System.Windows.Forms.Label team1NameLabel;
         private System.Windows.Forms.TextBox team1NameTextBox;
         private System.Windows.Forms.Label team2NameLabel;
@@ -192,6 +202,9 @@ namespace LaserTag.Simulator
         private System.Windows.Forms.Button startMatchButton;
         private System.Windows.Forms.Button pauseMatchButton;
         private System.Windows.Forms.Button stopResetMatchButton;
+        private System.Windows.Forms.Button resetMatchButton; // New button
+        private System.Windows.Forms.Label matchStateLabel;
+        private System.Windows.Forms.Label matchCountdownLabel;
         private System.Windows.Forms.Label matchTimerLabel;
 
         // Prop

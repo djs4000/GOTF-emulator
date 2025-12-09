@@ -2,6 +2,15 @@ using System.Text.Json.Serialization;
 
 namespace LaserTag.Simulator.Models;
 
+public enum MatchState
+{
+    WaitingOnStart,
+    Countdown,
+    Running,
+    Paused,
+    Completed
+}
+
 public class MatchSnapshotDto
 {
     [JsonPropertyName("id")]
@@ -10,11 +19,18 @@ public class MatchSnapshotDto
     [JsonPropertyName("timestamp")]
     public long Timestamp { get; set; }
 
+    [JsonIgnore] // Deprecated in favor of 'State'
     [JsonPropertyName("status")]
     public string Status { get; set; }
 
+    [JsonPropertyName("state")]
+    public MatchState State { get; set; } // New property
+
     [JsonPropertyName("remaining_time_ms")]
     public long RemainingTimeMs { get; set; }
+
+    [JsonPropertyName("remaining_countdown_time_ms")] // New property
+    public long RemainingCountdownTimeMs { get; set; }
 
     [JsonPropertyName("players")]
     public List<PlayerDto> Players { get; set; }
@@ -42,6 +58,11 @@ public class PlayerDto
 
     [JsonPropertyName("ammo")]
     public int Ammo { get; set; }
+
+    public PlayerDto Clone()
+    {
+        return (PlayerDto)MemberwiseClone();
+    }
 }
 
 public class PropSnapshotDto

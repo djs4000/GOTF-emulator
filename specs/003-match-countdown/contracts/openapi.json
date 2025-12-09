@@ -1,0 +1,105 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Laser Tag Simulator External Contracts (Match Emulation Enhancement)",
+    "version": "1.1.0",
+    "description": "Updates to MatchSnapshotDto for new match states and countdown timer."
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "MatchState": {
+        "type": "string",
+        "enum": [
+          "WaitingOnStart",
+          "Countdown",
+          "Running",
+          "Paused",
+          "Completed"
+        ],
+        "description": "Current state of the match simulation."
+      },
+      "MatchSnapshotDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the match."
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Timestamp of the snapshot in Unix milliseconds."
+          },
+          "status": {
+            "type": "string",
+            "description": "Deprecated: Use 'state' for match status. Provides current status text."
+          },
+          "state": {
+            "$ref": "#/components/schemas/MatchState",
+            "description": "The current state of the match simulation."
+          },
+          "remainingTimeMs": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Remaining match time in milliseconds."
+          },
+          "remainingCountdownTimeMs": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Remaining countdown time in milliseconds, if in Countdown or WaitingOnStart state."
+          },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerDto"
+            },
+            "description": "List of players in the match."
+          }
+        },
+        "required": [
+          "id",
+          "timestamp",
+          "state",
+          "remainingTimeMs",
+          "players"
+        ]
+      },
+      "PlayerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team": {
+            "type": "string"
+          },
+          "health": {
+            "type": "integer"
+          },
+          "ammo": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "killsCount": {
+            "type": "integer"
+          },
+          "deaths": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "team",
+          "health",
+          "ammo",
+          "state",
+          "killsCount",
+          "deaths"
+        ]
+      }
+    }
+  }
+}
