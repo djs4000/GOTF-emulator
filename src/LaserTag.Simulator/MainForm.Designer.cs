@@ -30,60 +30,65 @@ namespace LaserTag.Simulator
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 800);
+            this.ClientSize = new System.Drawing.Size(1200, 900); // Increased height for better layout
             this.Text = "Laser Tag Simulator";
 
             // Main Table Layout
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.mainLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayoutPanel.ColumnCount = 2;
-            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.mainLayoutPanel.RowCount = 2;
-            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85F)); // Main content row
+            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F)); // Console row
             this.Controls.Add(this.mainLayoutPanel);
             
             // Player Roster DataGridView
             this.playerDataGridView = new System.Windows.Forms.DataGridView();
             this.playerDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainLayoutPanel.SetColumnSpan(this.playerDataGridView, 2);
             this.mainLayoutPanel.Controls.Add(this.playerDataGridView, 0, 0);
 
-            // Bottom Panel
-            this.bottomLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.bottomLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bottomLayoutPanel.ColumnCount = 3;
-            this.bottomLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.bottomLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.bottomLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.mainLayoutPanel.Controls.Add(this.bottomLayoutPanel, 0, 1);
-            this.mainLayoutPanel.SetColumnSpan(this.bottomLayoutPanel, 2);
+            // Side Panel for GroupBoxes
+            var sidePanelLayout = new System.Windows.Forms.TableLayoutPanel() { Dock = System.Windows.Forms.DockStyle.Fill, ColumnCount = 1, RowCount = 3 };
+            sidePanelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F)); // Config gets more space
+            sidePanelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F)); // Match
+            sidePanelLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F)); // Prop
+            this.mainLayoutPanel.Controls.Add(sidePanelLayout, 1, 0);
 
             // GroupBoxes
             this.configGroupBox = new System.Windows.Forms.GroupBox() { Text = "Configuration", Dock = System.Windows.Forms.DockStyle.Fill };
             this.matchGroupBox = new System.Windows.Forms.GroupBox() { Text = "Match Simulation", Dock = System.Windows.Forms.DockStyle.Fill };
             this.propGroupBox = new System.Windows.Forms.GroupBox() { Text = "Prop Simulation", Dock = System.Windows.Forms.DockStyle.Fill };
-            this.bottomLayoutPanel.Controls.Add(this.configGroupBox, 0, 0);
-            this.bottomLayoutPanel.Controls.Add(this.matchGroupBox, 1, 0);
-            this.bottomLayoutPanel.Controls.Add(this.propGroupBox, 2, 0);
+            sidePanelLayout.Controls.Add(this.configGroupBox, 0, 0);
+            sidePanelLayout.Controls.Add(this.matchGroupBox, 0, 1);
+            sidePanelLayout.Controls.Add(this.propGroupBox, 0, 2);
 
             // -- Configuration Controls --
-            var configLayout = new System.Windows.Forms.FlowLayoutPanel() { Dock = System.Windows.Forms.DockStyle.Fill, FlowDirection = System.Windows.Forms.FlowDirection.TopDown, Padding = new System.Windows.Forms.Padding(10) };
+            var configLayout = new System.Windows.Forms.FlowLayoutPanel() { Dock = System.Windows.Forms.DockStyle.Fill, FlowDirection = System.Windows.Forms.FlowDirection.TopDown, Padding = new System.Windows.Forms.Padding(10), AutoScroll = true };
             this.configGroupBox.Controls.Add(configLayout);
 
             this.targetUrlLabel = new System.Windows.Forms.Label() { Text = "Target URL:", AutoSize = true };
-            this.targetUrlTextBox = new System.Windows.Forms.TextBox() { Text = "http://127.0.0.1:5055", Width = 200 };
+            this.targetUrlTextBox = new System.Windows.Forms.TextBox() { Text = "http://127.0.0.1:5055", Width = 300 };
             this.updateFreqLabel = new System.Windows.Forms.Label() { Text = "Update Frequency (ms):", AutoSize = true };
-            this.updateFreqNumericUpDown = new System.Windows.Forms.NumericUpDown() { Value = 100, Maximum = 10000 };
+            this.updateFreqNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.updateFreqNumericUpDown.Minimum = 0;
+            this.updateFreqNumericUpDown.Maximum = 10000;
+            this.updateFreqNumericUpDown.Value = 100;
             this.matchDurationLabel = new System.Windows.Forms.Label() { Text = "Match Duration (s):", AutoSize = true };
-            this.matchDurationNumericUpDown = new System.Windows.Forms.NumericUpDown() { Value = 219, Maximum = 3600 };
+            this.matchDurationNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.matchDurationNumericUpDown.Minimum = 0;
+            this.matchDurationNumericUpDown.Maximum = 3600;
+            this.matchDurationNumericUpDown.Value = 219;
             this.team1NameLabel = new System.Windows.Forms.Label() { Text = "Team 1 Name:", AutoSize = true };
             this.team1NameTextBox = new System.Windows.Forms.TextBox() { Text = "Team 1" };
             this.team2NameLabel = new System.Windows.Forms.Label() { Text = "Team 2 Name:", AutoSize = true };
             this.team2NameTextBox = new System.Windows.Forms.TextBox() { Text = "Team 2" };
             this.playersPerTeamLabel = new System.Windows.Forms.Label() { Text = "Players Per Team:", AutoSize = true };
-            this.playersPerTeamNumericUpDown = new System.Windows.Forms.NumericUpDown() { Value = 5, Minimum = 1, Maximum = 20 };
+            this.playersPerTeamNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.playersPerTeamNumericUpDown.Minimum = 1;
+            this.playersPerTeamNumericUpDown.Maximum = 20;
+            this.playersPerTeamNumericUpDown.Value = 5;
             this.generateRosterButton = new System.Windows.Forms.Button() { Text = "Generate Roster", AutoSize = true };
 
             configLayout.Controls.AddRange(new System.Windows.Forms.Control[] {
@@ -136,6 +141,7 @@ namespace LaserTag.Simulator
 
             propLayout.Controls.AddRange(new System.Windows.Forms.Control[] { this.propStateGroupBox, this.propArmingGroupBox, this.propTimerLabel });
 
+            // Console TextBox
             this.consoleTextBox = new System.Windows.Forms.TextBox() { 
                 Dock = System.Windows.Forms.DockStyle.Fill, 
                 Multiline = true, 
@@ -149,7 +155,7 @@ namespace LaserTag.Simulator
 
         private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
         private System.Windows.Forms.DataGridView playerDataGridView;
-        private System.Windows.Forms.TableLayoutPanel bottomLayoutPanel;
+        // private System.Windows.Forms.TableLayoutPanel bottomLayoutPanel; // No longer needed
         private System.Windows.Forms.GroupBox configGroupBox;
         private System.Windows.Forms.GroupBox matchGroupBox;
         private System.Windows.Forms.GroupBox propGroupBox;
