@@ -7,7 +7,7 @@ namespace LaserTag.Simulator.Services;
 public class PropSimulatorService : IDisposable
 {
     private readonly HttpClient _httpClient = new();
-    private Timer? _heartbeatTimer;
+    private System.Threading.Timer? _heartbeatTimer;
     private PropSnapshotDto _currentPropState;
     private string _targetUrl;
     private int _updateFrequency;
@@ -35,7 +35,7 @@ public class PropSimulatorService : IDisposable
         _updateFrequency = updateFrequency;
         _cts = new CancellationTokenSource();
         _startTime = DateTime.UtcNow;
-        _heartbeatTimer = new Timer(HeartbeatCallback, null, 0, _updateFrequency);
+        _heartbeatTimer = new System.Threading.Timer(HeartbeatCallback, null, 0, _updateFrequency);
     }
 
     public void Stop()

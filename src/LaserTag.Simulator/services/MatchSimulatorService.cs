@@ -7,7 +7,7 @@ namespace LaserTag.Simulator.Services;
 public class MatchSimulatorService : IDisposable
 {
     private readonly HttpClient _httpClient = new();
-    private Timer? _heartbeatTimer;
+    private System.Threading.Timer? _heartbeatTimer;
     private long _remainingTimeMs;
     private string _matchId;
     private List<PlayerDto> _players;
@@ -33,7 +33,7 @@ public class MatchSimulatorService : IDisposable
         _players = players;
         
         _cts = new CancellationTokenSource();
-        _heartbeatTimer = new Timer(HeartbeatCallback, null, 0, _updateFrequency);
+        _heartbeatTimer = new System.Threading.Timer(HeartbeatCallback, null, 0, _updateFrequency);
     }
 
     public void Pause()
