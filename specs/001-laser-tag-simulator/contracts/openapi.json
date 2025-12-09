@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Laser Tag Simulator External Contracts",
+    "version": "1.0.0",
+    "description": "Defines the data contracts the simulator sends to the GOTF-laser-tag application."
+  },
+  "paths": {
+    "/match": {
+      "post": {
+        "summary": "Sends a snapshot of the current match state.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchSnapshotDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The server successfully received the snapshot."
+          }
+        }
+      }
+    },
+    "/prop": {
+      "post": {
+        "summary": "Sends a snapshot of the current prop state.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropSnapshotDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The server successfully received the snapshot."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MatchSnapshotDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "timestamp": { "type": "integer", "format": "int64" },
+          "status": { "type": "string" },
+          "remaining_time_ms": { "type": "integer", "format": "int64" },
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlayerDto"
+            }
+          }
+        }
+      },
+      "PlayerDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "team": { "type": "string" },
+          "state": { "type": "string" },
+          "health": { "type": "integer" },
+          "kills_count": { "type": "integer" },
+          "deaths": { "type": "integer" },
+          "ammo": { "type": "integer" }
+        }
+      },
+      "PropSnapshotDto": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "integer", "format": "int64" },
+          "state": { "type": "string" },
+          "uptime_ms": { "type": "integer", "format": "int64" },
+          "timer_ms": { "type": "integer", "format": "int64" }
+        }
+      }
+    }
+  }
+}
