@@ -17,21 +17,23 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: C# / .NET 9.0
+**Primary Dependencies**: .NET 9.0
+**Storage**: N/A
+**Testing**: Compilation Only
+**Target Platform**: Windows 10/11
+**Project Type**: single/web/mobile - determines source structure
+**Performance Goals**: N/A
+**Constraints**: N/A
+**Scale/Scope**: N/A
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **Technology Stack**: Is the proposed solution using C# and .NET 9.0?
+- [ ] **Verification**: Does the plan rely only on compilation for verification?
+- [ ] **Modularity**: Is the proposed project structure modular?
 
 ## Project Structure
 
@@ -63,25 +65,18 @@ src/
 ├── cli/
 └── lib/
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
 # [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
 backend/
 ├── src/
 │   ├── models/
 │   ├── services/
 │   └── api/
-└── tests/
 
 frontend/
 ├── src/
 │   ├── components/
 │   ├── pages/
 │   └── services/
-└── tests/
 
 # [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
 api/
