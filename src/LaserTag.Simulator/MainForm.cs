@@ -21,6 +21,7 @@ namespace LaserTag.Simulator
             _matchSimulatorService = new MatchSimulatorService();
             _matchSimulatorService.OnMatchStateChanged += (state, countdownTime, matchTime) => UpdateMatchStateDisplay(state, countdownTime, matchTime);
             _matchSimulatorService.OnCountdownUpdate += (time) => UpdateMatchCountdownDisplay(time);
+            _matchSimulatorService.OnError += (message) => Log(message);
             _propSimulatorService = new PropSimulatorService();
             _propSimulatorService.OnError += (message) => Log(message);
             _propSimulatorService.OnPropTimerUpdate += (time) => UpdatePropTimerDisplay(time);

@@ -22,7 +22,6 @@ public class MatchSnapshotDto
     [JsonPropertyName("timestamp")]
     public long Timestamp { get; set; }
 
-    [JsonIgnore] // Deprecated in favor of 'State'
     [JsonPropertyName("status")]
     public string Status { get; set; }
 

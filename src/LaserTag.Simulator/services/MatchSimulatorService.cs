@@ -49,7 +49,7 @@ public class MatchSimulatorService : IDisposable
         _remainingCountdownTimeMs = _countdownDurationMs;
         _remainingTimeMs = _countdownDurationMs;
         _initialPlayers = players.Select(p => p.Clone()).ToList();
-        _players = players.Select(p => p.Clone()).ToList();
+        _players = players;
 
         TransitionToWaitingOnStart();
     }
@@ -100,10 +100,29 @@ public class MatchSimulatorService : IDisposable
         StopHeartbeatTimer();
         _cts.Cancel();
         _cts = new CancellationTokenSource();
-        _players = _initialPlayers.Select(p => p.Clone()).ToList();
+        ResetPlayerStateToInitial();
         _remainingCountdownTimeMs = _countdownDurationMs;
         _remainingTimeMs = _countdownDurationMs;
         TransitionToWaitingOnStart();
+    }
+
+    private void ResetPlayerStateToInitial()
+    {
+        foreach (var player in _players)
+        {
+            var initial = _initialPlayers.FirstOrDefault(p => p.Id == player.Id);
+            if (initial == null)
+            {
+                continue;
+            }
+
+            player.Team = initial.Team;
+            player.State = initial.State;
+            player.Health = initial.Health;
+            player.Ammo = initial.Ammo;
+            player.KillsCount = initial.KillsCount;
+            player.Deaths = initial.Deaths;
+        }
     }
 
     private void TransitionToWaitingOnStart()
