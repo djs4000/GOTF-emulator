@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GOTF-Emulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3cd0213d4da0d402705f1575ce50327b729ffdb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed820f6b1e141772104b5dac922dc5aa797974d9")]
 [assembly: System.Reflection.AssemblyProductAttribute("GOTF-Emulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GOTF-Emulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
