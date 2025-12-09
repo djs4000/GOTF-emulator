@@ -26,6 +26,7 @@ namespace LaserTag.Simulator
             InitializeEventHandlers();
             InitializePlayerContextMenu();
             UpdateConfig();
+            LoadDefaultRoster(); // Automatically generate roster on startup
             playerDataGridView.DataSource = _playerBindingSource;
 
             // _propSimulatorService.Start(() => _targetUrl, (int)this.updateFreqNumericUpDown.Value); // Prop starts with app - REMOVED
@@ -152,7 +153,7 @@ namespace LaserTag.Simulator
             _matchDuration = (int)this.matchDurationNumericUpDown.Value;
         }
 
-        private void GenerateRosterButton_Click(object? sender, EventArgs e)
+        private void LoadDefaultRoster()
         {
             var team1Name = this.team1NameTextBox.Text;
             var team2Name = this.team2NameTextBox.Text;
@@ -161,11 +162,16 @@ namespace LaserTag.Simulator
             var players = new List<PlayerDto>();
             for (int i = 1; i <= playersPerTeam; i++)
             {
-                players.Add(new PlayerDto { Id = $"P{i}", Team = team1Name, Health = 100, Ammo = 999, State = "Active", KillsCount = 0, Deaths = 0 });
-                players.Add(new PlayerDto { Id = $"P{i + playersPerTeam}", Team = team2Name, Health = 100, Ammo = 999, State = "Active", KillsCount = 0, Deaths = 0 });
+                players.Add(new PlayerDto { Id = i.ToString(), Team = team1Name, Health = 100, Ammo = 60, State = "Active", KillsCount = 0, Deaths = 0 });
+                players.Add(new PlayerDto { Id = (i + playersPerTeam).ToString(), Team = team2Name, Health = 100, Ammo = 60, State = "Active", KillsCount = 0, Deaths = 0 });
             }
 
             _playerBindingSource.DataSource = players;
+        }
+
+        private void GenerateRosterButton_Click(object? sender, EventArgs e)
+        {
+            LoadDefaultRoster();
         }
 
         private void StartMatchButton_Click(object? sender, EventArgs e)
