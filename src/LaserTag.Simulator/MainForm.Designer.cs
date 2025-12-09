@@ -49,13 +49,13 @@ namespace LaserTag.Simulator
             this.playerDataGridView.AutoGenerateColumns = false;
             this.playerDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Id", HeaderText = "Player ID", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Team", HeaderText = "Team", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Health", HeaderText = "Health", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Ammo", HeaderText = "Ammo", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "State", HeaderText = "State", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "KillsCount", HeaderText = "Kills", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
-                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Deaths", HeaderText = "Deaths", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic }
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Id", HeaderText = "Player ID", DataPropertyName = "Id", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Team", HeaderText = "Team", DataPropertyName = "Team", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Health", HeaderText = "Health", DataPropertyName = "Health", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Ammo", HeaderText = "Ammo", DataPropertyName = "Ammo", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "State", HeaderText = "State", DataPropertyName = "State", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "KillsCount", HeaderText = "Kills", DataPropertyName = "KillsCount", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
+                new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Deaths", HeaderText = "Deaths", DataPropertyName = "Deaths", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic }
             });
             this.mainLayoutPanel.Controls.Add(this.playerDataGridView, 0, 0);
 
