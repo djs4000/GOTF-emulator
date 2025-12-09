@@ -46,6 +46,7 @@ namespace LaserTag.Simulator
             
             // Player Roster DataGridView
             this.playerDataGridView = new System.Windows.Forms.DataGridView();
+            this.playerDataGridView.AutoGenerateColumns = false;
             this.playerDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                 new System.Windows.Forms.DataGridViewTextBoxColumn() { Name = "Id", HeaderText = "Player ID", SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic },
