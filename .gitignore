@@ -1,0 +1,23 @@
+# Visual Studio Code
+.vscode/
+
+# .NET Core
+bin/
+obj/
+
+# User-specific
+*.user
+*.suo
+
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Rider
+.idea/
+
+# Mac
+.DS_Store
+
+# Packages
+packages/
