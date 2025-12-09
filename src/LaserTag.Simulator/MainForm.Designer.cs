@@ -126,7 +126,7 @@ namespace LaserTag.Simulator
             this.matchTimerLabel = new System.Windows.Forms.Label() { Text = "Match Time: 00:00", AutoSize = true };
             
             matchLayout.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.matchStateLabel, this.matchCountdownLabel, this.matchTimerLabel
+                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.resetMatchButton, this.matchStateLabel, this.matchCountdownLabel, this.matchTimerLabel
             });
 
             // -- Prop Controls --
