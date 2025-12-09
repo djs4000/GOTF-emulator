@@ -27,6 +27,11 @@ namespace LaserTag.Simulator
 
             InitializeEventHandlers();
             InitializePlayerContextMenu();
+            
+            // Populate MatchState ComboBox
+            matchStateComboBox.DataSource = Enum.GetValues(typeof(MatchState));
+            matchStateComboBox.SelectedIndexChanged += MatchStateComboBox_SelectedIndexChanged;
+
             UpdateConfig();
             LoadDefaultRoster(); // Automatically generate roster on startup
             playerDataGridView.DataSource = _playerBindingSource;
@@ -35,6 +40,14 @@ namespace LaserTag.Simulator
             matchCountdownLabel.Text = "Countdown: --:--";
             matchTimerLabel.Text = "Match Time: --:--";
             // _propSimulatorService.Start(() => _targetUrl, (int)this.updateFreqNumericUpDown.Value); // Prop starts with app - REMOVED
+        }
+
+        private void MatchStateComboBox_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (matchStateComboBox.SelectedItem is MatchState selectedState)
+            {
+                _matchSimulatorService.SetMatchState(selectedState);
+            }
         }
 
         private void UpdateMatchStateDisplay(MatchState state, long remainingCountdownTimeMs, long remainingMatchTimeMs)
@@ -48,8 +61,9 @@ namespace LaserTag.Simulator
             matchStateLabel.Text = $"State: {state}";
             
             // Enable/Disable controls based on state
-            startMatchButton.Enabled = (state == MatchState.WaitingOnStart || state == MatchState.Paused);
-            pauseMatchButton.Enabled = (state == MatchState.Running);
+            startMatchButton.Enabled = (state == MatchState.WaitingOnStart);
+            pauseMatchButton.Enabled = (state == MatchState.Running || state == MatchState.Paused);
+            pauseMatchButton.Text = (state == MatchState.Running) ? "Pause" : "Resume";
             stopResetMatchButton.Enabled = (state == MatchState.Running || state == MatchState.Paused || state == MatchState.Countdown);
             resetMatchButton.Enabled = true; // Always enable reset
 
@@ -64,10 +78,10 @@ namespace LaserTag.Simulator
                 UpdateMatchCountdownDisplay(0); // Clear countdown display
                 UpdateMatchTimerDisplay(remainingMatchTimeMs);
             }
-            else // WaitingOnStart, Completed
+            else // WaitingOnStart, Completed, Idle, Cancelled, WaitingOnFinalData
             {
                 UpdateMatchCountdownDisplay(0);
-                UpdateMatchTimerDisplay(remainingMatchTimeMs); // Show 00:00 or current remaining
+                UpdateMatchTimerDisplay(0); 
             }
         }
 
@@ -95,11 +109,12 @@ namespace LaserTag.Simulator
 
         private void InitializeEventHandlers()
         {
+            
             this.generateRosterButton.Click += GenerateRosterButton_Click;
             this.startMatchButton.Click += StartMatchButton_Click;
             this.pauseMatchButton.Click += PauseMatchButton_Click;
             this.stopResetMatchButton.Click += StopResetMatchButton_Click;
-            this.resetMatchButton.Click += ResetMatchButton_Click;
+            //this.resetMatchButton.Click += ResetMatchButton_Click;
 
             this.targetUrlTextBox.TextChanged += (s, e) => UpdateConfig();
             this.updateFreqNumericUpDown.ValueChanged += (s, e) => UpdateConfig();
@@ -264,9 +279,16 @@ namespace LaserTag.Simulator
 
         private void PauseMatchButton_Click(object? sender, EventArgs e)
         {
-            Log("Pausing match...");
-            _matchSimulatorService.Pause();
-            Log("Match paused.");
+            if (pauseMatchButton.Text == "Pause")
+            {
+                Log("Pausing match...");
+                _matchSimulatorService.Pause();
+            }
+            else
+            {
+                Log("Resuming match...");
+                _matchSimulatorService.Start();
+            }
         }
 
         private void StopResetMatchButton_Click(object? sender, EventArgs e)

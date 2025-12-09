@@ -4,11 +4,14 @@ namespace LaserTag.Simulator.Models;
 
 public enum MatchState
 {
+    Idle,
     WaitingOnStart,
     Countdown,
     Running,
-    Paused,
-    Completed
+    WaitingOnFinalData,
+    Completed,
+    Cancelled,
+    Paused
 }
 
 public class MatchSnapshotDto

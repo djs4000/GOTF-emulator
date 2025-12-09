@@ -121,12 +121,13 @@ namespace LaserTag.Simulator
             this.startMatchButton = new System.Windows.Forms.Button() { Text = "Start Match", AutoSize = true };
             this.pauseMatchButton = new System.Windows.Forms.Button() { Text = "Pause Match", AutoSize = true };
             this.stopResetMatchButton = new System.Windows.Forms.Button() { Text = "Stop/Reset Match", AutoSize = true };
+            this.matchStateComboBox = new System.Windows.Forms.ComboBox() { AutoSize = true };
             this.matchStateLabel = new System.Windows.Forms.Label() { Text = "State: Waiting on Start", AutoSize = true };
             this.matchCountdownLabel = new System.Windows.Forms.Label() { Text = "Countdown: --:--", AutoSize = true };
             this.matchTimerLabel = new System.Windows.Forms.Label() { Text = "Match Time: 00:00", AutoSize = true };
             
             matchLayout.Controls.AddRange(new System.Windows.Forms.Control[] {
-                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.resetMatchButton, this.matchStateLabel, this.matchCountdownLabel, this.matchTimerLabel
+                this.startMatchButton, this.pauseMatchButton, this.stopResetMatchButton, this.resetMatchButton, this.matchStateComboBox, this.matchStateLabel, this.matchCountdownLabel, this.matchTimerLabel
             });
 
             // -- Prop Controls --
@@ -203,6 +204,7 @@ namespace LaserTag.Simulator
         private System.Windows.Forms.Button pauseMatchButton;
         private System.Windows.Forms.Button stopResetMatchButton;
         private System.Windows.Forms.Button resetMatchButton; // New button
+        private System.Windows.Forms.ComboBox matchStateComboBox; // New ComboBox
         private System.Windows.Forms.Label matchStateLabel;
         private System.Windows.Forms.Label matchCountdownLabel;
         private System.Windows.Forms.Label matchTimerLabel;
