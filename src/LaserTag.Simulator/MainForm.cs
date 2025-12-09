@@ -166,6 +166,7 @@ namespace LaserTag.Simulator
                 players.Add(new PlayerDto { Id = (i + playersPerTeam).ToString(), Team = team2Name, Health = 100, Ammo = 60, State = "Active", KillsCount = 0, Deaths = 0 });
             }
 
+            players = players.OrderBy(p => int.Parse(p.Id)).ToList();
             _playerBindingSource.DataSource = players;
         }
 
