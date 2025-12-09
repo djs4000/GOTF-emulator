@@ -200,7 +200,11 @@ public class MatchSimulatorService : IDisposable
 
     private long GetDisplayedRemainingTime()
     {
-        return _matchState == MatchState.WaitingOnStart ? _countdownDurationMs : _remainingTimeMs;
+        return _matchState switch
+        {
+            MatchState.WaitingOnStart or MatchState.Countdown => _remainingCountdownTimeMs,
+            _ => _remainingTimeMs
+        };
     }
 
     private async Task SendSnapshotAsync(bool isFinal, CancellationToken? cancellationToken = null)
