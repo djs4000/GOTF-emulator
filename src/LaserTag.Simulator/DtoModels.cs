@@ -37,6 +37,9 @@ public class MatchSnapshotDto
 
     [JsonPropertyName("players")]
     public List<PlayerDto> Players { get; set; }
+
+    [JsonPropertyName("isFinal")]
+    public bool IsFinal { get; set; }
 }
 
 public class PlayerDto
